@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <UseWinUI>true</UseWinUI>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AndroidRecovery.ViewModels\AndroidRecovery.ViewModels.csproj" />
+    <ProjectReference Include="..\..\Core\AndroidRecovery.Models\AndroidRecovery.Models.csproj" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.250907003" />
+  </ItemGroup>
+</Project>

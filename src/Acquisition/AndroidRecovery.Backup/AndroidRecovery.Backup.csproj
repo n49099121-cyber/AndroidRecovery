@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\AndroidRecovery.Models\AndroidRecovery.Models.csproj" />
+  </ItemGroup>
+</Project>

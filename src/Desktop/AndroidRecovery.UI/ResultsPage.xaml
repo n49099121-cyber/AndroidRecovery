@@ -1,0 +1,174 @@
+<Page
+    x:Class="AndroidRecovery.UI.ResultsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="using:AndroidRecovery.UI"
+    xmlns:models="using:AndroidRecovery.Models">
+    <Grid Background="{StaticResource PageBackgroundBrush}" Padding="28" RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ui:PageHeader Title="Results" Subtitle="Verified evidence files with source paths and acquisition hashes." />
+
+        <Border Grid.Row="1" Style="{StaticResource CardBorderStyle}" Padding="12">
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <StackPanel Spacing="3">
+                    <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource SecondaryTextBlockStyle}" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding VerificationLabel}" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding WarningSummary}" Foreground="{StaticResource WarningBrush}" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding PackagePath}" FontFamily="Consolas" FontSize="11" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+                <ProgressRing Grid.Column="1" IsActive="{Binding IsBusy}" Width="20" Height="20" VerticalAlignment="Center" />
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <Button Content="Analyze" Command="{Binding AnalyzeCommand}" Style="{StaticResource SecondaryButtonStyle}" />
+                    <Button Content="Cancel Analysis" Command="{Binding CancelCommand}" IsEnabled="{Binding IsAnalyzing}" Style="{StaticResource SecondaryButtonStyle}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource CardBorderStyle}" Padding="12"
+                Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding ProgressSummary}" FontWeight="SemiBold"
+                           Visibility="{Binding IsAnalyzing, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <TextBlock Text="{Binding RecoveryProgressSummary}" FontWeight="SemiBold"
+                           Visibility="{Binding IsExporting, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <TextBlock Grid.Column="1" Text="{Binding CurrentPath}" FontFamily="Consolas" FontSize="12" TextTrimming="CharacterEllipsis" />
+            </Grid>
+        </Border>
+
+        <StackPanel Grid.Row="3" Spacing="4">
+            <TextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     PlaceholderText="Search name, source path, type, or format"
+                     AutomationProperties.Name="Search analysis results" />
+            <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <ComboBox Header="Category" ItemsSource="{Binding CategoryFilters}" SelectedItem="{Binding CategoryFilter, Mode=TwoWay}" />
+                <ComboBox Grid.Column="1" Header="Type" ItemsSource="{Binding TypeFilters}" SelectedItem="{Binding TypeFilter, Mode=TwoWay}" />
+                <ComboBox Grid.Column="2" Header="Format" ItemsSource="{Binding FormatFilters}" SelectedItem="{Binding FormatFilter, Mode=TwoWay}" />
+                <ComboBox Grid.Column="3" Header="Confidence" ItemsSource="{Binding ConfidenceFilters}" SelectedItem="{Binding ConfidenceFilter, Mode=TwoWay}" />
+            </Grid>
+            <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <ComboBox Header="Integrity" ItemsSource="{Binding IntegrityFilters}" SelectedItem="{Binding IntegrityFilter, Mode=TwoWay}" />
+                <ComboBox Grid.Column="1" Header="Support" ItemsSource="{Binding SupportFilters}" SelectedItem="{Binding SupportFilter, Mode=TwoWay}" />
+                <TextBox Grid.Column="2" Header="Min size (bytes)" Text="{Binding MinimumSizeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" />
+                <TextBox Grid.Column="3" Header="Max size (bytes)" Text="{Binding MaximumSizeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Number" />
+                <ComboBox Grid.Column="4" Header="Sort by" ItemsSource="{Binding SortFields}" SelectedItem="{Binding SortField, Mode=TwoWay}" />
+                <ToggleButton Grid.Column="5" Content="Descending" IsChecked="{Binding SortDescending, Mode=TwoWay}"
+                              VerticalAlignment="Bottom" AutomationProperties.Name="Toggle descending result sort" />
+            </Grid>
+        </StackPanel>
+
+        <ItemsControl Grid.Row="4" ItemsSource="{Binding CategoryCountLabels}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate><ItemsWrapGrid Orientation="Horizontal" /></ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
+        <Grid Grid.Row="5" ColumnSpacing="14">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="1.25*" MinWidth="460" /><ColumnDefinition Width="1*" MinWidth="340" /></Grid.ColumnDefinitions>
+            <Grid>
+                <ListView x:Name="ResultList" ItemsSource="{Binding FilteredItems}" SelectionMode="Multiple"
+                          SelectionChanged="OnSelectionChanged" DoubleTapped="OnResultDoubleTapped"
+                          Background="Transparent" BorderThickness="0"
+                          AutomationProperties.Name="Analyzed evidence results">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:AnalyzedEvidenceItem">
+                            <Border Style="{StaticResource CardBorderStyle}" Padding="12" Margin="0,0,0,8">
+                                <StackPanel Spacing="4">
+                                    <Grid ColumnSpacing="12" RowSpacing="4">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="90" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                                        <TextBlock Text="{x:Bind Type}" FontWeight="SemiBold" Foreground="{StaticResource InfoBrush}" />
+                                        <TextBlock Grid.Column="1" Text="{x:Bind FileName}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Grid.Column="2" Text="{x:Bind Confidence}" Foreground="{StaticResource TextSecondaryBrush}" />
+                                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind RelativePath}" FontFamily="Consolas" FontSize="12" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Grid.Row="2" Text="{x:Bind SizeLabel}" Foreground="{StaticResource TextMutedBrush}" FontSize="12" />
+                                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind DetectedFormat}" Foreground="{StaticResource TextMutedBrush}" FontSize="12" />
+                                        <TextBlock Grid.Row="2" Grid.Column="2" Text="{x:Bind Sha256}" FontFamily="Consolas" FontSize="10" TextTrimming="CharacterEllipsis" />
+                                    </Grid>
+                                    <StackPanel Orientation="Horizontal" Spacing="4"
+                                                Visibility="{x:Bind ExtensionMismatch, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <SymbolIcon Symbol="Important" Foreground="{StaticResource WarningBrush}" Width="14" Height="14" />
+                                        <TextBlock Text="Extension does not match file signature" Foreground="{StaticResource WarningBrush}" FontSize="12" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Border Style="{StaticResource CardBorderStyle}" Padding="24"
+                        Visibility="{Binding HasNoMatchingItems, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock Text="No analyzed files match the current filters." Style="{StaticResource SecondaryTextBlockStyle}" TextAlignment="Center" />
+                </Border>
+            </Grid>
+
+            <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}" Padding="16"
+                    Visibility="{Binding HasPreview, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ScrollViewer>
+                    <StackPanel Spacing="10">
+                        <Grid ColumnSpacing="10">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <TextBlock Text="Preview" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                            <Button Grid.Column="1" Content="Close" Click="OnClosePreviewClick" Style="{StaticResource SecondaryButtonStyle}" />
+                        </Grid>
+                        <Image x:Name="PreviewImage" MaxHeight="300" Stretch="Uniform"
+                               Visibility="{Binding ShowImagePreview, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <TextBox Text="{Binding PreviewDetails.TextContent}" IsReadOnly="True" AcceptsReturn="True"
+                                 TextWrapping="Wrap" MaxHeight="300"
+                                 Visibility="{Binding ShowTextPreview, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <TextBlock Text="{Binding PreviewDetails.Message}" Style="{StaticResource SecondaryTextBlockStyle}" TextWrapping="Wrap"
+                                   Visibility="{Binding ShowUnavailablePreview, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <TextBlock Text="{Binding PreviewDetails.FileName}" FontWeight="SemiBold" TextWrapping="Wrap" />
+                        <TextBlock Text="{Binding PreviewDetails.Kind}" Foreground="{StaticResource TextSecondaryBrush}" />
+                        <TextBlock Text="{Binding PreviewDetails.Format}" Foreground="{StaticResource TextSecondaryBrush}" />
+                        <TextBlock Text="{Binding PreviewSizeLabel}" Foreground="{StaticResource TextSecondaryBrush}" />
+                        <TextBlock Text="{Binding PreviewDetails.SourcePath}" FontFamily="Consolas" FontSize="11" TextWrapping="Wrap" />
+                        <TextBlock Text="{Binding PreviewDetails.Sha256}" FontFamily="Consolas" FontSize="10" TextWrapping="Wrap" />
+                        <TextBlock Text="{Binding PreviewDetails.Confidence}" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding PreviewDetails.ConfidenceReason}" Style="{StaticResource SecondaryTextBlockStyle}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <Border Grid.Row="6" Style="{StaticResource CardBorderStyle}" Padding="12"
+                Visibility="{Binding ShowResultsToolbar, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding ResultCountSummary}" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding SelectedSizeLabel}" Foreground="{StaticResource TextSecondaryBrush}" />
+                    <Button Content="Select All Visible" Command="{Binding SelectAllVisibleCommand}" Style="{StaticResource SecondaryButtonStyle}" />
+                    <Button Content="Clear" Command="{Binding ClearSelectionCommand}" Style="{StaticResource SecondaryButtonStyle}" />
+                    <Button Content="Preview" Command="{Binding PreviewSelectedCommand}" Style="{StaticResource SecondaryButtonStyle}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                    <Button Content="Cancel Export" Command="{Binding CancelExportCommand}" IsEnabled="{Binding IsExporting}" Style="{StaticResource SecondaryButtonStyle}" />
+                    <Button Content="Recover Selected" Command="{Binding ExportSelectedCommand}" IsEnabled="{Binding CanExportSelected}" Style="{StaticResource PrimaryButtonStyle}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="6" Style="{StaticResource CardBorderStyle}" Padding="12"
+                Visibility="{Binding HasRecoveryResult, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel Spacing="8">
+                <TextBlock Text="{Binding RecoveryResultSummary}" FontWeight="SemiBold" />
+                <TextBlock Text="{Binding RecoveryResult.OutputFolderPath}" FontFamily="Consolas" FontSize="11" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding RecoveryMessages}" Foreground="{StaticResource WarningBrush}" TextWrapping="Wrap" />
+                <Button Content="Open Export Folder" Command="{Binding OpenExportFolderCommand}"
+                        Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Right" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

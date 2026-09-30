@@ -1,0 +1,43 @@
+<Page
+    x:Class="AndroidRecovery.UI.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="using:AndroidRecovery.UI">
+    <ScrollViewer Background="{StaticResource PageBackgroundBrush}">
+        <StackPanel Padding="32" Spacing="20" MaxWidth="1080" HorizontalAlignment="Left">
+            <ui:PageHeader Title="Settings" Subtitle="Application preferences are not persisted in this build. No displayed values will be applied to an acquisition." />
+            <Border Style="{StaticResource CardBorderStyle}">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="General" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="220" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                        <TextBlock Text="Default evidence location" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1" Text="Not configured" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" />
+                        <Button Grid.Column="2" Content="Browse" IsEnabled="False" Style="{StaticResource SecondaryButtonStyle}" />
+                    </Grid>
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="220" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                        <TextBlock Text="Default recovery location" VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1" Text="Not configured" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" />
+                        <Button Grid.Column="2" Content="Browse" IsEnabled="False" Style="{StaticResource SecondaryButtonStyle}" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource CardBorderStyle}">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Acquisition" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <CheckBox Content="Automatically verify evidence after acquisition" IsEnabled="False" />
+                    <CheckBox Content="Confirm before starting acquisition" IsChecked="True" IsEnabled="False" />
+                    <TextBlock Text="Acquisition settings will be enabled when evidence creation is implemented." Style="{StaticResource SecondaryTextBlockStyle}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource CardBorderStyle}">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Appearance and logging" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <TextBlock Text="Light appearance is active. Structured logs are written under Local AppData\\AndroidRecovery\\logs and do not include recovered content." Style="{StaticResource SecondaryTextBlockStyle}" />
+                    <Button Content="Open diagnostics" Click="OnOpenDiagnosticsClick" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

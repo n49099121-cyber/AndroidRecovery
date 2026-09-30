@@ -1,0 +1,57 @@
+<Page
+    x:Class="AndroidRecovery.UI.DeviceDetailsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer Background="{StaticResource PageBackgroundBrush}">
+        <StackPanel Padding="32" Spacing="20" MaxWidth="1000" HorizontalAlignment="Left">
+            <Button Content="Devices" Style="{StaticResource SecondaryButtonStyle}" Click="OnBackToDevicesClick" HorizontalAlignment="Left" />
+            <StackPanel Spacing="6">
+                <TextBlock Text="Device details" Style="{StaticResource PageTitleTextBlockStyle}" />
+                <TextBlock Text="{Binding SelectedDeviceName}" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding SelectedDeviceIdentity}" Style="{StaticResource SecondaryTextBlockStyle}" />
+            </StackPanel>
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="Device" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                        <Grid ColumnSpacing="12" RowSpacing="12">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="140" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                            <TextBlock Text="Manufacturer" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Column="1" Text="{Binding SelectedManufacturer}" />
+                            <TextBlock Grid.Row="1" Text="Model" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedModel}" />
+                            <TextBlock Grid.Row="2" Text="Product" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedProduct}" />
+                            <TextBlock Grid.Row="3" Text="Android" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SelectedAndroidVersion}" />
+                            <TextBlock Grid.Row="4" Text="API level" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SelectedApiLevel}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}">
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="Connection" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                        <Grid ColumnSpacing="12" RowSpacing="12">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="140" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                            <TextBlock Text="ADB state" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Column="1" Text="{Binding SelectedAdbState}" />
+                            <TextBlock Grid.Row="1" Text="Authorization" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedAuthorizationState}" />
+                            <TextBlock Grid.Row="2" Text="USB identifier" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedDevice.Id}" TextTrimming="CharacterEllipsis" />
+                        </Grid>
+                        <TextBlock Text="This application does not unlock the phone, bypass authorization, or modify device data." Style="{StaticResource SecondaryTextBlockStyle}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Expander Header="Technical information" IsExpanded="False">
+                <Border Background="{StaticResource SurfaceMutedBrush}" Padding="16" CornerRadius="6">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Product identifier" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding SelectedProduct}" FontFamily="Consolas" TextWrapping="Wrap" />
+                        <TextBlock Text="ADB serial/device identifier" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding SelectedDevice.Id}" FontFamily="Consolas" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

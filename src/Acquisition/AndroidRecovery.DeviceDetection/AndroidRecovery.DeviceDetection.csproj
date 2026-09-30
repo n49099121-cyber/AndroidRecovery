@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\AndroidRecovery.Adb\AndroidRecovery.Adb.csproj" />
+    <ProjectReference Include="..\..\Core\AndroidRecovery.Models\AndroidRecovery.Models.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
+  </ItemGroup>
+</Project>

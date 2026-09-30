@@ -1,0 +1,189 @@
+<Page
+    x:Class="AndroidRecovery.UI.RecoveryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="using:AndroidRecovery.UI"
+    xmlns:recovery="using:AndroidRecovery.Recovery">
+    <ScrollViewer Background="{StaticResource PageBackgroundBrush}">
+        <StackPanel Padding="32" Spacing="24" MaxWidth="1180" HorizontalAlignment="Left">
+            <ui:PageHeader Title="{Binding StateTitle}" Subtitle="Acquire accessible shared-storage files into a verifiable evidence package. This is acquisition, not deleted-file recovery." />
+
+            <Border Style="{StaticResource CardBorderStyle}" Padding="18" Visibility="{Binding IsEditingWorkflow, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid ColumnSpacing="14">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <Border Width="44" Height="44" CornerRadius="8" Background="{StaticResource InfoBackgroundBrush}">
+                        <SymbolIcon Symbol="Phone" Foreground="{StaticResource InfoBrush}" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Spacing="3" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding SelectedDeviceName}" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" />
+                        <TextBlock Text="{Binding SelectedDeviceIdentity}" Style="{StaticResource SecondaryTextBlockStyle}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Spacing="6" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding SelectedAdbState}" Foreground="{StaticResource TextSecondaryBrush}" />
+                        <TextBlock Text="{Binding AdbStatus}" Foreground="{StaticResource TextMutedBrush}" FontSize="12" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource CardBorderStyle}" Padding="18" Visibility="{Binding IsEditingWorkflow, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Selected data types" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <TextBlock Text="{Binding SelectedCategoriesSummary}" Style="{StaticResource SecondaryTextBlockStyle}" TextWrapping="Wrap" />
+                    <Button Content="Change selection" Click="OnChangeCategoriesClick" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorderStyle}" Padding="18" Visibility="{Binding IsEditingWorkflow, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Device" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <TextBlock Text="{Binding DeviceReadinessMessage}" Style="{StaticResource SecondaryTextBlockStyle}" TextWrapping="Wrap" />
+                    <Button Content="Select device" Click="OnSelectDeviceClick" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+
+            <StackPanel Spacing="12" Visibility="{Binding IsEditingWorkflow, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock Text="Scan method" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <Border Style="{StaticResource CardBorderStyle}" Padding="18">
+                        <StackPanel Spacing="8">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <SymbolIcon Symbol="Setting" Foreground="{StaticResource InfoBrush}" />
+                                <RadioButton Content="Android Debug Bridge" IsChecked="True" IsEnabled="False" />
+                            </StackPanel>
+                            <TextBlock Text="Copy accessible files from authorized shared storage using read-only ADB commands." Style="{StaticResource SecondaryTextBlockStyle}" />
+                            <TextBlock Text="{Binding AdbStatus}" Foreground="{StaticResource TextMutedBrush}" />
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}" Padding="18" Opacity="0.75">
+                        <StackPanel Spacing="8">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <SymbolIcon Symbol="Folder" Foreground="{StaticResource TextMutedBrush}" />
+                                <TextBlock Text="Media Transfer Protocol" FontWeight="SemiBold" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <TextBlock Text="MTP acquisition is not implemented in this build." Style="{StaticResource SecondaryTextBlockStyle}" />
+                            <TextBlock Text="Unavailable in this build" Foreground="{StaticResource TextMutedBrush}" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </StackPanel>
+
+            <Border Style="{StaticResource CardBorderStyle}" Padding="18" Visibility="{Binding IsEditingWorkflow, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Evidence destination" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                        <TextBox Text="{Binding DestinationPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 PlaceholderText="Choose a destination directory" AutomationProperties.Name="Evidence destination directory" />
+                        <Button Grid.Column="1" Content="Browse" Command="{Binding BrowseDestinationCommand}" Style="{StaticResource SecondaryButtonStyle}" />
+                    </Grid>
+                    <TextBlock Text="A unique package will be created under the selected directory. Existing packages are never overwritten." Style="{StaticResource SecondaryTextBlockStyle}" />
+                </StackPanel>
+            </Border>
+
+            <Border Background="{StaticResource InfoBackgroundBrush}" CornerRadius="8" Padding="16"
+                    Visibility="{Binding HasValidationMessage, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock Text="{Binding ValidationMessage}" Foreground="{StaticResource InfoBrush}" TextWrapping="Wrap" />
+            </Border>
+
+            <Border Style="{StaticResource CardBorderStyle}" Padding="18" Visibility="{Binding IsEditingWorkflow, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Safety" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <TextBlock Text="{Binding SafetyMessage}" Style="{StaticResource SecondaryTextBlockStyle}" />
+                    <Button Content="Start Recovery" Command="{Binding StartRecoveryCommand}" Style="{StaticResource PrimaryButtonStyle}"
+                            IsEnabled="{Binding CanStartAcquisition}" HorizontalAlignment="Right" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorderStyle}" Padding="24" Visibility="{Binding IsPreparing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Spacing="14" HorizontalAlignment="Center">
+                    <ProgressRing IsActive="True" Width="32" Height="32" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding StateTitle}" Style="{StaticResource SectionTitleTextBlockStyle}" TextAlignment="Center" />
+                    <TextBlock Text="Validating device and destination, then enumerating selected shared-storage folders." Style="{StaticResource SecondaryTextBlockStyle}" TextAlignment="Center" />
+                    <StackPanel Spacing="8" Visibility="{Binding HasPreparingProgress, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock Text="{Binding DiscoverySummary}" FontWeight="SemiBold" TextAlignment="Center" />
+                        <TextBlock Text="{Binding DiscoveryBytesLabel}" Foreground="{StaticResource TextSecondaryBrush}" TextAlignment="Center" />
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="Current source" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding CurrentSourceLabel}" FontFamily="Consolas" FontSize="12" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <TextBlock Text="Errors:" Foreground="{StaticResource TextSecondaryBrush}" />
+                            <TextBlock Text="{Binding ErrorCount}" Foreground="{StaticResource TextSecondaryBrush}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <TextBlock Text="Warnings:" Foreground="{StaticResource TextSecondaryBrush}" />
+                            <TextBlock Text="{Binding WarningCount}" Foreground="{StaticResource TextSecondaryBrush}" />
+                        </StackPanel>
+                    </StackPanel>
+                    <Button Content="Cancel Acquisition" Command="{Binding CancelAcquisitionCommand}" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Center" />
+                </StackPanel>
+            </Border>
+
+            <StackPanel Spacing="16" Visibility="{Binding IsAcquisitionRunning, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock Text="Keep the Android device connected until acquisition completes." Foreground="{StaticResource WarningBrush}" TextWrapping="Wrap" />
+                <Border Style="{StaticResource CardBorderStyle}" Padding="24">
+                    <StackPanel Spacing="16">
+                        <Grid ColumnSpacing="16">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding ProgressLabel}" FontSize="32" FontWeight="SemiBold" Foreground="{StaticResource BrandPrimaryBrush}" VerticalAlignment="Center" />
+                            <ProgressBar Grid.Column="1" Value="{Binding ProgressPercent}" Maximum="100" Height="10" VerticalAlignment="Center"
+                                         AutomationProperties.Name="Acquisition progress" AutomationProperties.HelpText="Progress is reported from actual acquired bytes or files." />
+                        </Grid>
+                        <TextBlock Text="{Binding FilesSummary}" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                        <TextBlock Text="{Binding BytesSummary}" Foreground="{StaticResource TextSecondaryBrush}" />
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="Current source" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding CurrentSourceLabel}" FontFamily="Consolas" FontSize="12" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Spacing="4" Visibility="{Binding CurrentDestinationLabel, Converter={StaticResource StringToVisibilityConverter}}">
+                            <TextBlock Text="Evidence copy" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding CurrentDestinationLabel}" FontFamily="Consolas" FontSize="12" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <Grid ColumnSpacing="24">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                            <StackPanel><TextBlock Text="Elapsed" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Text="{Binding ElapsedLabel}" /></StackPanel>
+                            <StackPanel Grid.Column="1" Visibility="{Binding HasEstimatedRemaining, Converter={StaticResource BooleanToVisibilityConverter}}"><TextBlock Text="Remaining" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Text="{Binding EstimatedRemainingLabel}" /></StackPanel>
+                            <StackPanel Grid.Column="2"><TextBlock Text="Errors" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Text="{Binding ErrorCount}" /></StackPanel>
+                            <StackPanel Grid.Column="3"><TextBlock Text="Warnings" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Text="{Binding WarningCount}" /></StackPanel>
+                        </Grid>
+                        <Button Content="Cancel Acquisition" Command="{Binding CancelAcquisitionCommand}" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Right" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <Border Style="{StaticResource CardBorderStyle}" Padding="24" Visibility="{Binding IsCompleted, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="{Binding StateTitle}" Style="{StaticResource PageTitleTextBlockStyle}" />
+                    <TextBlock Text="{Binding ValidationMessage}" Style="{StaticResource SecondaryTextBlockStyle}" />
+                    <Grid ColumnSpacing="20" RowSpacing="12">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="160" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                        <TextBlock Text="Device" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Column="1" Text="{Binding SelectedDeviceName}" />
+                        <TextBlock Grid.Row="1" Text="Files acquired" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SummaryFilesAcquired}" />
+                        <TextBlock Grid.Row="2" Text="Data acquired" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SummaryBytesAcquired}" />
+                        <TextBlock Grid.Row="3" Text="Verification" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding VerificationLabel}" />
+                        <TextBlock Grid.Row="4" Text="Duration" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding DurationLabel}" />
+                    </Grid>
+                    <TextBlock Text="{Binding EvidencePackagePath}" FontFamily="Consolas" FontSize="12" TextWrapping="Wrap" />
+                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
+                        <Button Content="Open Evidence" Command="{Binding OpenEvidenceCommand}" Style="{StaticResource SecondaryButtonStyle}" />
+                        <Button Content="Start Analysis" IsEnabled="False" Style="{StaticResource SecondaryButtonStyle}" ToolTipService.ToolTip="Evidence analysis is not implemented yet." />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorderStyle}" Padding="20" Visibility="{Binding IsFailedOrCancelled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{Binding StateTitle}" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <TextBlock Text="{Binding ValidationMessage}" Style="{StaticResource SecondaryTextBlockStyle}" />
+                    <TextBlock Text="Already acquired evidence has been preserved when a package was created." Style="{StaticResource SecondaryTextBlockStyle}" />
+                    <TextBlock Text="{Binding TechnicalDetails}" FontFamily="Consolas" FontSize="12" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding EvidencePackagePath}" FontFamily="Consolas" FontSize="12" TextWrapping="Wrap" />
+                    <Button Content="Open Evidence" Command="{Binding OpenEvidenceCommand}" IsEnabled="{Binding HasEvidencePackage}"
+                            Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Right" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

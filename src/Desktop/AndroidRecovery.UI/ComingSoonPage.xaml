@@ -1,0 +1,14 @@
+<Page
+    x:Class="AndroidRecovery.UI.ComingSoonPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Background="{StaticResource PageBackgroundBrush}" Padding="32">
+        <Border Style="{StaticResource CardBorderStyle}" MaxWidth="680" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <StackPanel Spacing="12">
+                <TextBlock Text="{Binding Title}" Style="{StaticResource PageTitleTextBlockStyle}" />
+                <TextBlock Text="Coming soon" Foreground="{StaticResource InfoBrush}" FontWeight="SemiBold" />
+                <TextBlock Text="{Binding Description}" Style="{StaticResource SecondaryTextBlockStyle}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

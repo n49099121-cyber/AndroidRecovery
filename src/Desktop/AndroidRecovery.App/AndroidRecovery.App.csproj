@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <UseWinUI>true</UseWinUI>
+    <WindowsPackageType>None</WindowsPackageType>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AndroidRecovery.UI\AndroidRecovery.UI.csproj" />
+    <ProjectReference Include="..\AndroidRecovery.ViewModels\AndroidRecovery.ViewModels.csproj" />
+    <ProjectReference Include="..\..\Analysis\AndroidRecovery.FileSystem\AndroidRecovery.FileSystem.csproj" />
+    <ProjectReference Include="..\..\Acquisition\AndroidRecovery.Adb\AndroidRecovery.Adb.csproj" />
+    <ProjectReference Include="..\..\Acquisition\AndroidRecovery.DeviceDetection\AndroidRecovery.DeviceDetection.csproj" />
+    <ProjectReference Include="..\..\Core\AndroidRecovery.Core\AndroidRecovery.Core.csproj" />
+    <ProjectReference Include="..\..\Core\AndroidRecovery.Logging\AndroidRecovery.Logging.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.250907003" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\..\tools\platform-tools\adb.exe"
+             Link="tools\platform-tools\adb.exe"
+             CopyToOutputDirectory="PreserveNewest"
+             CopyToPublishDirectory="PreserveNewest"
+             Condition="Exists('..\..\..\tools\platform-tools\adb.exe')" />
+    <Content Include="..\..\..\tools\platform-tools\*.dll"
+             Link="tools\platform-tools\%(Filename)%(Extension)"
+             CopyToOutputDirectory="PreserveNewest"
+             CopyToPublishDirectory="PreserveNewest"
+             Condition="Exists('..\..\..\tools\platform-tools\AdbWinApi.dll')" />
+  </ItemGroup>
+</Project>

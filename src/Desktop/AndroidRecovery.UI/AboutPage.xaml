@@ -1,0 +1,18 @@
+<Page
+    x:Class="AndroidRecovery.UI.AboutPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="using:AndroidRecovery.UI">
+    <Grid Background="{StaticResource PageBackgroundBrush}" Padding="32">
+        <StackPanel Spacing="24" MaxWidth="900" HorizontalAlignment="Left">
+            <ui:PageHeader Title="About AndroidRecovery" Subtitle="Authorized Android device analysis for Windows." />
+            <Border Style="{StaticResource CardBorderStyle}">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Read-only by default" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <TextBlock Text="This build detects ADB devices and reads basic properties from authorized devices. It does not unlock devices, bypass authentication, reset phones, or claim deleted-data recovery." Style="{StaticResource SecondaryTextBlockStyle}" />
+                    <TextBlock x:Name="VersionValue" Foreground="{StaticResource TextMutedBrush}" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Page>

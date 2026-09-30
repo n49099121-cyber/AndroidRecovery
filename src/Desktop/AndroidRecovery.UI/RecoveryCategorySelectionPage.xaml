@@ -1,0 +1,60 @@
+<Page
+    x:Class="AndroidRecovery.UI.RecoveryCategorySelectionPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="using:AndroidRecovery.UI"
+    xmlns:recovery="using:AndroidRecovery.Recovery">
+    <ScrollViewer Background="{StaticResource PageBackgroundBrush}">
+        <StackPanel Padding="32" Spacing="20" MaxWidth="1180" HorizontalAlignment="Left">
+            <ui:PageHeader Title="What do you want to recover?" Subtitle="Choose the accessible shared-storage file types to acquire from your authorized Android device." />
+
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <TextBlock Text="Only data available through the current authorized connection can be acquired. Private app data, messages, contacts, and deleted files are not supported by this scan." Style="{StaticResource SecondaryTextBlockStyle}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                    <Button Content="Select All" Command="{Binding SelectAllCategoriesCommand}" Style="{StaticResource SecondaryButtonStyle}" />
+                    <Button Content="Clear All" Command="{Binding ClearAllCategoriesCommand}" Style="{StaticResource SecondaryButtonStyle}" />
+                </StackPanel>
+            </Grid>
+
+            <GridView ItemsSource="{Binding Categories}" SelectionMode="None" IsItemClickEnabled="False"
+                      IsTabStop="False" Height="306" Background="Transparent"
+                      ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      AutomationProperties.Name="Select Android data types to acquire">
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid Orientation="Horizontal" ItemWidth="252" ItemHeight="142" />
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+                <GridView.ItemTemplate>
+                    <DataTemplate x:DataType="recovery:RecoveryCategoryOption">
+                        <ui:RecoveryCategoryCard Category="{x:Bind Title}" Description="{x:Bind Description}"
+                            Glyph="{x:Bind Glyph}" IsSelected="{x:Bind IsSelected, Mode=TwoWay}"
+                            InteractionEnabled="{x:Bind IsEnabled, Mode=OneWay}" />
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+
+            <Border Style="{StaticResource CardBorderStyle}" Padding="18">
+                <Grid ColumnSpacing="14">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <Border Width="44" Height="44" CornerRadius="8" Background="{StaticResource InfoBackgroundBrush}">
+                        <SymbolIcon Symbol="Phone" Foreground="{StaticResource InfoBrush}" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding SelectedDeviceName}" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding DeviceReadinessMessage}" Style="{StaticResource SecondaryTextBlockStyle}" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <Button Grid.Column="2" Content="Connect device" Click="OnConnectDeviceClick" Style="{StaticResource SecondaryButtonStyle}" VerticalAlignment="Center" />
+                </Grid>
+            </Border>
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding SelectedCategoriesSummary}" Style="{StaticResource SecondaryTextBlockStyle}" VerticalAlignment="Center" TextWrapping="Wrap" />
+                <Button Grid.Column="1" Content="Next" Command="{Binding ContinueToAcquisitionCommand}"
+                        IsEnabled="{Binding CanContinue}" Style="{StaticResource PrimaryButtonStyle}" MinWidth="140" />
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

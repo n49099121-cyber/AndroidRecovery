@@ -1,0 +1,44 @@
+<Page
+    x:Class="AndroidRecovery.UI.DiagnosticsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="using:AndroidRecovery.UI">
+    <ScrollViewer Background="{StaticResource PageBackgroundBrush}">
+        <StackPanel Padding="32" Spacing="20" MaxWidth="1080" HorizontalAlignment="Left">
+            <Button Content="Settings" Click="OnBackToSettingsClick" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Left" />
+            <ui:PageHeader Title="Diagnostics" Subtitle="Technical application and device-detection status. Device identifiers and private data are omitted." />
+            <Border Style="{StaticResource CardBorderStyle}">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Application" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <Grid ColumnSpacing="16" RowSpacing="10">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="180" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                        <TextBlock Text="Version" Foreground="{StaticResource TextMutedBrush}" /><TextBlock x:Name="VersionValue" Grid.Column="1" />
+                        <TextBlock Grid.Row="1" Text="Architecture" Foreground="{StaticResource TextMutedBrush}" /><TextBlock x:Name="ArchitectureValue" Grid.Row="1" Grid.Column="1" />
+                        <TextBlock Grid.Row="2" Text="Windows" Foreground="{StaticResource TextMutedBrush}" /><TextBlock x:Name="WindowsValue" Grid.Row="2" Grid.Column="1" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource CardBorderStyle}">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="ADB and device" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <Grid ColumnSpacing="16" RowSpacing="10">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="180" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                        <TextBlock Text="ADB executable" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Column="1" Text="{Binding AdbExecutablePath}" TextWrapping="Wrap" FontFamily="Consolas" />
+                        <TextBlock Grid.Row="1" Text="ADB status" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AdbAvailabilityLabel}" />
+                        <TextBlock Grid.Row="2" Text="Selected device state" Foreground="{StaticResource TextMutedBrush}" /><TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedAdbState}" />
+                    </Grid>
+                    <TextBlock Text="ADB version probing and copyable diagnostic reports are not implemented." Style="{StaticResource SecondaryTextBlockStyle}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource CardBorderStyle}">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Logs" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                    <TextBlock x:Name="LogPathValue" TextWrapping="Wrap" FontFamily="Consolas" />
+                    <Button Content="Open logs" Click="OnOpenLogsClick" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

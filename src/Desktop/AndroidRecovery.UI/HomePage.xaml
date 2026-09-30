@@ -1,0 +1,50 @@
+<Page
+    x:Class="AndroidRecovery.UI.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="using:AndroidRecovery.UI">
+    <ScrollViewer Background="{StaticResource PageBackgroundBrush}">
+        <StackPanel Padding="32" Spacing="24" MaxWidth="1120" HorizontalAlignment="Left">
+            <ui:PageHeader Title="Recover Your Android Data" Subtitle="Acquire accessible files safely, then analyze and verify them on this PC." />
+
+            <Border Style="{StaticResource CardBorderStyle}" Padding="28">
+                <Grid ColumnSpacing="28">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Border Width="68" Height="68" CornerRadius="10" Background="{StaticResource InfoBackgroundBrush}" VerticalAlignment="Top">
+                        <SymbolIcon Symbol="Find" Foreground="{StaticResource InfoBrush}" Width="32" Height="32" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
+                        <TextBlock Text="Recover Android Data" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                        <TextBlock Text="Select accessible photos, videos, audio, documents, and downloads. AndroidRecovery will not modify or delete data on your phone." Style="{StaticResource SecondaryTextBlockStyle}" TextWrapping="Wrap" />
+                        <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource TextMutedBrush}" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Spacing="8" VerticalAlignment="Center">
+                        <Button Content="Start Recovery" Style="{StaticResource PrimaryButtonStyle}" Click="OnStartRecoveryClick" AutomationProperties.Name="Start Android data recovery" />
+                        <Button Content="Connect Device" Style="{StaticResource SecondaryButtonStyle}" Click="OnViewDevicesClick" AutomationProperties.Name="View connected Android devices" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <StackPanel Spacing="12">
+                <TextBlock Text="Recent recovery sessions" Style="{StaticResource SectionTitleTextBlockStyle}" />
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <SymbolIcon Symbol="Folder" Foreground="{StaticResource TextMutedBrush}" Width="28" Height="28" VerticalAlignment="Top" />
+                        <StackPanel Grid.Column="1" Spacing="4">
+                            <TextBlock Text="No recovery sessions yet" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" />
+                            <TextBlock Text="Connect your Android device and start a scan to create your first evidence-backed session." Style="{StaticResource SecondaryTextBlockStyle}" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
