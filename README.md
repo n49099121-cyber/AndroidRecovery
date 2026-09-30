@@ -1,4 +1,8 @@
-# Android Data Recovery Tool
+# AndroidRecovery
+
+**Open-source Android acquisition, analysis, evidence, and recovery/export platform for Windows.**
+
+**Created and maintained by Naresh.**
 
 AndroidRecovery is a read-only-first Windows desktop application for authorized Android device acquisition and analysis. The current milestone supports ADB device discovery and acquisition of accessible public shared-storage files into a verifiable evidence package. Acquisition is not deleted-file recovery; Android-private app data, SMS, call history, encrypted data, and inaccessible files are not bypassed.
 
